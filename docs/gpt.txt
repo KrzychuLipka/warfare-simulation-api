@@ -1,0 +1,12 @@
+Rekrutujê na stanowisko senior backend developer. Chcê robiæ serwisy REST w du¿ej korporacji IT. W ramach kursu chcia³bym zaimplementowaæ REST API w tematyce gry wojennej. Celem systemu jest przechowywanie danych na potrzeby symulacji dzia³añ wojennych. Moja baza w PostgreSQL (+ PostGIS) przechowuje dane dotycz¹ce: jednostek wojskowych uczestnicz¹cych w rozgrywce, ruchów wojsk, uderzeñ z u¿yciem ró¿nych typów amunicji i ich w³aœciwoœciach bojowych, misji wojennych, stron konfliktu, obiektów w terenie (np. rzek, dróg, lasów), przypisania jednostek do misji, raportów bitewnych, zasobów dostêpnych dla ¿o³nierzy. Dziêki takiej bazie mo¿na przyk³adowo wczytaæ warstwy z geometri¹ w QGIS i jest fajna geo-wizualizacja. Ale ja chcia³bym dodatkowo REST API. Poni¿ej struktura bazy danych w PostGIS: Opis jednostki wojskowej (nazwa, typ, frakcja, si³a, status) Ruchy jednostek (znacznik czasu, œcie¿ka, prêdkoœæ, kierunek) Uderzenia (znacznik czasu, lokalizacja, efekt) Typy amunicji (nazwa, zasiêg, obra¿enia, promieñ wybuchu) Pola bitew (nazwa, region) ¯o³nierze (nazwa u¿ytkownika, frakcja, ranga, data do³¹czenia) Misje wojenne (nazwa, cel, czas rozpoczêcia, czas zakoñczenia) Logi bitewne (znacznik czasu, opis, lokalizacja, jednostka, misja) Przeszkody terenowe (nazwa, typ)
+
+Z tego co wiem, firma na pewno oczekuje ode mnie nastêpuj¹cych skillów:
+1. Spring (Core + beans + context + security [OAuth2] + jdbc data + web do wystawiania RESTA)
+2. Migracje bazy danych (Liquibase)
+3. HQL
+4. native query; query param; repozytoria
+5. testy (JUnit 5, Spock w Groove, cucamber)
+6. konteneryzacja (Docker)
+7. CI/CD
+
+Zacznimy od jednej prostej us³ugi ale od A do Z (ma byæ opublikowane i dzia³aæ na zewn¹trz).Na ten moment wystarczy mi bazowaæ na 2 powi¹zanych tabelach (czyli chcê na razie tylko 2 modele danych) a z czasem w analogiczny sposób dokoñczê samodzielnie ten serwis.

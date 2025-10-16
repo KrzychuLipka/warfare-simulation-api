@@ -1,0 +1,40 @@
+** Utworzenie projektu Maven **
+
+mvn archetype:generate -DgroupId=pl.lipov.militaryassistant -DartifactId=militaryassistant -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+
+** Struktura katalogów **
+
+Rekomendowana struktura projektu Spring + Hibernate (Maven)
+militaryassistant/
++¦¦ src/
+-   +¦¦ main/
+-   -   +¦¦ java/
+-   -   -   L¦¦ pl/
+-   -   -       L¦¦ lipov/
+-   -   -           L¦¦ militaryassistant/
+-   -   -               +¦¦ MilitaryAssistantApplication.java
+-   -   -               +¦¦ config/              # Konfiguracje (np. Hibernate, Security)
+-   -   -               +¦¦ controller/          # REST API
+-   -   -               +¦¦ service/             # Logika biznesowa
+-   -   -               +¦¦ repository/          # Interfejsy JPA
+-   -   -               L¦¦ model/               # Encje JPA
+-   -   L¦¦ resources/
+-   -       L¦¦ META-INF/
+-   -           L¦¦ persistence.xml
+-   L¦¦ test/
+-       L¦¦ java/
+-           L¦¦ pl/
+-               L¦¦ lipov/
+-                   L¦¦ militaryassistant/
+-                       L¦¦ ...                 # Testy jednostkowe
++¦¦ pom.xml
+
+
+** Obs³uga po³¹czeñ z baz¹ danych **
+
+Delegujemy obs³ugê po³¹czeñ z baz¹ danych do
+dostawcy Java Transaction API (JTA) — projektu open source Bitronix. Bitronix oferuje
+pulê po³¹czeñ za poœrednictwem zarz¹dzanej klasy java.sql.DataSource, a tak¿e standar-
+dow¹ klasê javax.transaction.UserTransaction w dowolnym œrodowisku Java SE. Bitro-
+nix automatycznie wi¹¿e te obiekty z JNDI oraz interfejsami Hibernate za poœrednic-
+twem wyszukiwania Bitronix przez JNDI.
