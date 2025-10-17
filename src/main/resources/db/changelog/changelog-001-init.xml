@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="0" author="lipov">
+        <sql>CREATE EXTENSION IF NOT EXISTS postgis;</sql>
+    </changeSet>
+
+    <changeSet id="1" author="lipov">
+        <createTable tableName="unit">
+            <column name="id" type="BIGSERIAL">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(100)"/>
+            <column name="type" type="VARCHAR(50)"/>
+            <column name="faction" type="VARCHAR(50)"/>
+            <column name="strength" type="INT"/>
+            <column name="status" type="VARCHAR(50)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="lipov">
+        <createTable tableName="movement">
+            <column name="id" type="BIGSERIAL">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="timestamp" type="TIMESTAMP"/>
+            <column name="path" type="geometry(MultiLineString,2180)"/>
+            <column name="speed" type="FLOAT"/>
+            <column name="direction" type="VARCHAR(50)"/>
+            <column name="unit_id" type="BIGINT">
+                <constraints foreignKeyName="fk_movement_unit" references="unit(id)" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="lipov">
+        <createIndex indexName="idx_movement_unit" tableName="movement">
+            <column name="unit_id"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- TODO Not working -->
+<!--    <changeSet id="4" author="lipov">-->
+    <!--        <spatial:createSpatialIndex indexName="idx_movement_path" tableName="movement">-->
+    <!--            <spatial:column name="path"/>-->
+    <!--        </spatial:createSpatialIndex>-->
+    <!--    </changeSet>-->
+
+    <changeSet id="5" author="lipov">
+        <insert tableName="unit">
+            <column name="name" value="Drużyna Alpha"/>
+            <column name="type" value="infantry"/>
+            <column name="faction" value="Czerwoni"/>
+            <column name="strength" value="100"/>
+            <column name="status" value="ACTIVE"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
