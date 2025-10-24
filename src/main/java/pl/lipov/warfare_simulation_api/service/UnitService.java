@@ -5,6 +5,7 @@ import pl.lipov.warfare_simulation_api.model.Unit;
 import pl.lipov.warfare_simulation_api.repository.UnitRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UnitService {
@@ -15,31 +16,44 @@ public class UnitService {
         this.repo = repo;
     }
 
-    public List<Unit> getAllUnits() {
-        return repo.findAll();
-    }
-
-    List<Unit> getUnitsByName(String name) {
-        return repo.findByName(name);
-    }
-
-    List<Unit> getUnitsByType(String type) {
-        return repo.findByType(type);
-    }
-
-    List<Unit> getUnitsByFaction(String faction) {
-        return repo.findByFaction(faction);
-    }
-
-    List<Unit> getUnitsByStatus(String status) {
-        return repo.findByStatus(status);
-    }
-
-    public Unit saveUnit(Unit unit) {
+    public Unit save(Unit unit) {
         return repo.save(unit);
     }
 
-    public void deleteUnit(Unit unit) {
-        repo.delete(unit);
+    public List<Unit> getAll() {
+        return repo.findAll();
+    }
+
+    public Optional<Unit> findById(Long id) {
+        return repo.findById(id);
+    }
+
+    public List<Unit> filterByName(String name) {
+        return repo.findByName(name);
+    }
+
+    public List<Unit> filterByType(String type) {
+        return repo.findByType(type);
+    }
+
+    public List<Unit> filterByFaction(String faction) {
+        return repo.findByFaction(faction);
+    }
+
+    public List<Unit> filterByStatus(String status) {
+        return repo.findByStatus(status);
+    }
+
+    public List<Unit> filter(
+            String name,
+            String type,
+            String faction,
+            String status
+    ) {
+        return repo.filter(name, type, faction, status);
+    }
+
+    public void deleteById(Long id) {
+        repo.deleteById(id);
     }
 }

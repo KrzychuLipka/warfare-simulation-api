@@ -1,23 +1,39 @@
-package pl.lipov.warfare_simulation_api.model;
+package pl.lipov.warfare_simulation_api.dto;
 
-import jakarta.persistence.*;
+import pl.lipov.warfare_simulation_api.model.Movement;
 
 import java.util.List;
 
-@Entity
-@Table(name = "unit")
-public class Unit {
+public class UnitResponseDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String type;
     private String faction;
     private Integer strength;
     private String status;
-    @OneToMany(mappedBy = "unit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Movement> movements;
+
+    private UnitResponseDto() {
+    }
+
+    public UnitResponseDto(
+            Long id,
+            String name,
+            String type,
+            String faction,
+            Integer strength,
+            String status,
+            List<Movement> movements
+    ) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.faction = faction;
+        this.strength = strength;
+        this.status = status;
+        this.movements = movements;
+    }
 
     public Long getId() {
         return id;

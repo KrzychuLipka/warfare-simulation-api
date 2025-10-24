@@ -1,31 +1,24 @@
-package pl.lipov.warfare_simulation_api.model;
+package pl.lipov.warfare_simulation_api.dto;
 
-import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
-import java.util.List;
+public class UnitRequestDto {
 
-@Entity
-@Table(name = "unit")
-public class Unit {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @NotBlank
     private String name;
+    @NotBlank
+    @Pattern(regexp = "LAND|AIR|NAVY")
     private String type;
+    @NotBlank
+    @Pattern(regexp = "POLAND|REST_OF_WORLD")
     private String faction;
+    @NotNull
+    @Min(value = 1)
+    @Max(value = 100)
     private Integer strength;
+    @NotBlank
+    @Pattern(regexp = "ACTIVE|INACTIVE|DESTROYED")
     private String status;
-    @OneToMany(mappedBy = "unit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Movement> movements;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -65,13 +58,5 @@ public class Unit {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public List<Movement> getMovements() {
-        return movements;
-    }
-
-    public void setMovements(List<Movement> movements) {
-        this.movements = movements;
     }
 }

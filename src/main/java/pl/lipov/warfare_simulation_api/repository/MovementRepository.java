@@ -11,8 +11,6 @@ import java.util.List;
 @Repository
 public interface MovementRepository extends JpaRepository<Movement, Long> {
 
-    List<Movement> findByUnit(Unit unit);
-    List<Movement> findByUnitId(Long unitId);
-    List<Movement> findByTimestampBetween(Instant start, Instant end);
-    Movement findFirstByUnitOrderByTimestampDesc(Unit unit);
+    List<Movement> findByStartTimestampBetween(Instant from, Instant to);
+    List<Movement> findByEndTimestampBetween(Instant from, Instant to);
 }

@@ -12,11 +12,10 @@ public class Movement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Instant timestamp;
+    private Instant startTimestamp;
+    private Instant endTimestamp;
     @Column(columnDefinition = "geometry(MultiLineString,2180)")
     private MultiLineString path;
-    private Double speed;
-    private String direction;
     @ManyToOne
     @JoinColumn(name = "unit_id")
     private Unit unit;
@@ -29,12 +28,20 @@ public class Movement {
         this.id = id;
     }
 
-    public Instant getTimestamp() {
-        return timestamp;
+    public Instant getStartTimestamp() {
+        return startTimestamp;
     }
 
-    public void setTimestamp(Instant timestamp) {
-        this.timestamp = timestamp;
+    public void setStartTimestamp(Instant startTimestamp) {
+        this.startTimestamp = startTimestamp;
+    }
+
+    public Instant getEndTimestamp() {
+        return endTimestamp;
+    }
+
+    public void setEndTimestamp(Instant endTimestamp) {
+        this.endTimestamp = endTimestamp;
     }
 
     public MultiLineString getPath() {
@@ -43,22 +50,6 @@ public class Movement {
 
     public void setPath(MultiLineString path) {
         this.path = path;
-    }
-
-    public Double getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(Double speed) {
-        this.speed = speed;
-    }
-
-    public String getDirection() {
-        return direction;
-    }
-
-    public void setDirection(String direction) {
-        this.direction = direction;
     }
 
     public Unit getUnit() {
