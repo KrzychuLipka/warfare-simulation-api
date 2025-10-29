@@ -16,8 +16,8 @@ public class Movement {
     private Instant endTimestamp;
     @Column(columnDefinition = "geometry(MultiLineString,2180)")
     private MultiLineString path;
-    @ManyToOne
-    @JoinColumn(name = "unit_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "unit_id", nullable = false)
     private Unit unit;
 
     public Long getId() {

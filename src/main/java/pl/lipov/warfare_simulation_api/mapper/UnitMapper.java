@@ -2,6 +2,7 @@ package pl.lipov.warfare_simulation_api.mapper;
 
 import pl.lipov.warfare_simulation_api.dto.UnitRequestDto;
 import pl.lipov.warfare_simulation_api.dto.UnitResponseDto;
+import pl.lipov.warfare_simulation_api.model.Movement;
 import pl.lipov.warfare_simulation_api.model.Unit;
 
 import java.util.List;
@@ -17,6 +18,9 @@ public class UnitMapper {
                 unit.getStrength(),
                 unit.getStatus(),
                 unit.getMovements()
+                        .stream()
+                        .map(Movement::getId)
+                        .toList()
         );
     }
 

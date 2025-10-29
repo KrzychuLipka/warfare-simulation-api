@@ -12,7 +12,7 @@ public class UnitResponseDto {
     private String faction;
     private Integer strength;
     private String status;
-    private List<Movement> movements;
+    private List<Long> movementIds;
 
     private UnitResponseDto() {
     }
@@ -24,7 +24,7 @@ public class UnitResponseDto {
             String faction,
             Integer strength,
             String status,
-            List<Movement> movements
+            List<Long> movementIds
     ) {
         this.id = id;
         this.name = name;
@@ -32,7 +32,7 @@ public class UnitResponseDto {
         this.faction = faction;
         this.strength = strength;
         this.status = status;
-        this.movements = movements;
+        this.movementIds = movementIds;
     }
 
     public Long getId() {
@@ -83,11 +83,11 @@ public class UnitResponseDto {
         this.status = status;
     }
 
-    public List<Movement> getMovements() {
-        return movements;
+    public List<Long> getMovementIds() {
+        return movementIds;
     }
 
-    public void setMovements(List<Movement> movements) {
-        this.movements = movements;
+    public void setMovementIds(List<Long> movementIds) {
+        this.movementIds = movementIds;
     }
 }

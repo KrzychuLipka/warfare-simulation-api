@@ -12,6 +12,7 @@ import pl.lipov.warfare_simulation_api.model.Movement;
 import pl.lipov.warfare_simulation_api.model.Unit;
 import pl.lipov.warfare_simulation_api.service.MovementService;
 import pl.lipov.warfare_simulation_api.service.UnitService;
+import pl.lipov.warfare_simulation_api.util.GeometryUtils;
 
 import java.time.Instant;
 import java.util.List;
@@ -32,9 +33,8 @@ public class MovementController {
     }
 
     @PostMapping
-    public ResponseEntity<MovementResponseDto> saveMovement(@Valid @RequestBody MovementRequestDto movementRequest) {
-        Unit unit = unitService
-                .findById(movementRequest.getUnitId())
+    public ResponseEntity<MovementResponseDto> saveMovement(@RequestBody MovementRequestDto movementRequest) {
+        Unit unit = unitService.findById(movementRequest.getUnitId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Unit not found"));
 
         Movement movement;
@@ -45,25 +45,19 @@ public class MovementController {
         }
 
         Movement savedMovement = movementService.save(movement);
-        return ResponseEntity.status(HttpStatus.CREATED).body(MovementMapper.toMovementResponseDto(savedMovement));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(MovementMapper.toMovementResponseDto(savedMovement));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<MovementResponseDto> getMovement(@PathVariable Long id) {
-        Movement movement = movementService
-                .findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Movement not found"));
-        return ResponseEntity.ok(MovementMapper.toMovementResponseDto(movement));
-    }
 
     @GetMapping
     public List<MovementResponseDto> getAllMovements() {
         return MovementMapper.toMovementResponseDtoList(movementService.getAll());
     }
 
-    //GET /api/movements/filterByStartTimestampBetween?start=2025-10-01T00:00:00Z&end=2025-10-20T23:59:59Z
-    @GetMapping("/filterByStartTimestampBetween")
-    public List<MovementResponseDto> filterMovementByName(
+    //GET /api/movements/findByStartTimestampBetween?start=2025-10-01T00:00:00Z&end=2025-10-20T23:59:59Z
+    @GetMapping("/findByStartTimestampBetween")
+    public List<MovementResponseDto> getMovementsByStartTimestampBetween(
             @RequestParam Instant start,
             @RequestParam Instant end
     ) {
@@ -71,22 +65,41 @@ public class MovementController {
     }
 
     @GetMapping("/findByEndTimestampBetween")
-    public List<MovementResponseDto> findByEndTimestampBetween(
+    public List<MovementResponseDto> getMovementsByEndTimestampBetween(
             @RequestParam Instant start,
             @RequestParam Instant end
     ) {
         return MovementMapper.toMovementResponseDtoList(movementService.findByEndTimestampBetween(start, end));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<MovementResponseDto> getMovementById(@PathVariable Long id) {
+        Movement movement = movementService
+                .findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Movement not found"));
+        return ResponseEntity.ok(MovementMapper.toMovementResponseDto(movement));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<MovementResponseDto> updateMovement(
             @PathVariable Long id,
-            @Valid @RequestBody Movement movement
+            @Valid @RequestBody MovementRequestDto movementRequest
     ) {
-        movement.setId(id);
-        Movement updatedMovement = movementService.save(movement);
+        Movement existingMovement = movementService.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Movement not found"));
+
+        Unit unit = unitService.findById(movementRequest.getUnitId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Unit not found"));
+
+        existingMovement.setStartTimestamp(movementRequest.getStartTimestamp());
+        existingMovement.setEndTimestamp(movementRequest.getEndTimestamp());
+        existingMovement.setPath(GeometryUtils.parseWkt(movementRequest.getPathWKT()));
+        existingMovement.setUnit(unit);
+
+        Movement updatedMovement = movementService.save(existingMovement);
         return ResponseEntity.ok(MovementMapper.toMovementResponseDto(updatedMovement));
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMovementById(@PathVariable Long id) {

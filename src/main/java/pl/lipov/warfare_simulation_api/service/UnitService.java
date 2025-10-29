@@ -28,22 +28,6 @@ public class UnitService {
         return repo.findById(id);
     }
 
-    public List<Unit> filterByName(String name) {
-        return repo.findByName(name);
-    }
-
-    public List<Unit> filterByType(String type) {
-        return repo.findByType(type);
-    }
-
-    public List<Unit> filterByFaction(String faction) {
-        return repo.findByFaction(faction);
-    }
-
-    public List<Unit> filterByStatus(String status) {
-        return repo.findByStatus(status);
-    }
-
     public List<Unit> filter(
             String name,
             String type,

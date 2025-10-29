@@ -29,46 +29,26 @@ public class UnitController {
         return ResponseEntity.status(HttpStatus.CREATED).body(UnitMapper.toUnitResponseDto(savedUnit));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UnitResponseDto> getUnit(@PathVariable Long id) {
-        Unit unit = service.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Unit not found"));
-        return ResponseEntity.ok(UnitMapper.toUnitResponseDto(unit));
-    }
-
     @GetMapping
     public List<UnitResponseDto> getAllUnits() {
         return UnitMapper.toUnitResponseDtoList(service.getAll());
     }
 
-    @GetMapping("/filterByName")
-    public List<UnitResponseDto> filterUnitByName(String name) {
-        return UnitMapper.toUnitResponseDtoList(service.filterByName(name));
-    }
-
-    @GetMapping("/filterByType")
-    public List<UnitResponseDto> filterUnitByType(String type) {
-        return UnitMapper.toUnitResponseDtoList(service.filterByType(type));
-    }
-
-    @GetMapping("/filterByFaction")
-    public List<UnitResponseDto> filterUnitByFaction(String faction) {
-        return UnitMapper.toUnitResponseDtoList(service.filterByFaction(faction));
-    }
-
-    @GetMapping("/filterByStatus")
-    public List<UnitResponseDto> filterUnitByStatus(String status) {
-        return UnitMapper.toUnitResponseDtoList(service.filterByStatus(status));
-    }
-
     @GetMapping("/filter")
-    public List<UnitResponseDto> filterUnit(
-            String name,
-            String type,
-            String faction,
-            String status
+    public List<UnitResponseDto> filterUnits(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) String faction,
+            @RequestParam(required = false) String status
     ) {
         return UnitMapper.toUnitResponseDtoList(service.filter(name, type, faction, status));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UnitResponseDto> getUnitById(@PathVariable Long id) {
+        Unit unit = service.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Unit not found"));
+        return ResponseEntity.ok(UnitMapper.toUnitResponseDto(unit));
     }
 
     @PutMapping("/{id}")
