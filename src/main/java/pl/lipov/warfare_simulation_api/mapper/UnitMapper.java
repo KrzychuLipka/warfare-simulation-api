@@ -5,6 +5,7 @@ import pl.lipov.warfare_simulation_api.dto.UnitResponseDto;
 import pl.lipov.warfare_simulation_api.model.Movement;
 import pl.lipov.warfare_simulation_api.model.Unit;
 
+import java.util.Collections;
 import java.util.List;
 
 public class UnitMapper {
@@ -17,10 +18,10 @@ public class UnitMapper {
                 unit.getFaction(),
                 unit.getStrength(),
                 unit.getStatus(),
-                unit.getMovements()
+                unit.getMovements() != null ? unit.getMovements()
                         .stream()
                         .map(Movement::getId)
-                        .toList()
+                        .toList() : Collections.emptyList()
         );
     }
 
