@@ -2,6 +2,7 @@ package pl.lipov.warfare_simulation_api.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,7 +18,7 @@ public class Unit {
     private Integer strength;
     private String status;
     @OneToMany(mappedBy = "unit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Movement> movements;
+    private List<Movement> movements = new ArrayList<>();
 
     public Long getId() {
         return id;
