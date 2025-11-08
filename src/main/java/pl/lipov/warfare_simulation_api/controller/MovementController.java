@@ -3,6 +3,7 @@ package pl.lipov.warfare_simulation_api.controller;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.lipov.warfare_simulation_api.dto.MovementRequestDto;
@@ -49,7 +50,7 @@ public class MovementController {
                 .body(MovementMapper.toMovementResponseDto(savedMovement));
     }
 
-
+    @PreAuthorize("hasAuthority('SCOPE_read:movements')")
     @GetMapping
     public List<MovementResponseDto> getAllMovements() {
         return MovementMapper.toMovementResponseDtoList(movementService.getAll());
