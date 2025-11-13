@@ -34,7 +34,7 @@ public class MovementMapper {
         Movement movement = new Movement();
         movement.setStartTimestamp(movementRequest.getStartTimestamp());
         movement.setEndTimestamp(movementRequest.getEndTimestamp());
-        MultiLineString path = GeometryUtils.parseWkt(movementRequest.getPathWKT());
+        MultiLineString path = GeometryUtils.parseMultiLineWkt(movementRequest.getPathWKT());
         movement.setPath(path);
         movement.setUnit(unit);
         return movement;

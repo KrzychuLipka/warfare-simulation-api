@@ -13,10 +13,13 @@ public class Unit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String type;
-    private String faction;
+    @Enumerated(EnumType.STRING)
+    private UnitType type;
+    @Enumerated(EnumType.STRING)
+    private UnitFaction faction;
     private Integer strength;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private UnitStatus status;
     @OneToMany(mappedBy = "unit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Movement> movements = new ArrayList<>();
 
@@ -36,19 +39,19 @@ public class Unit {
         this.name = name;
     }
 
-    public String getType() {
+    public UnitType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(UnitType type) {
         this.type = type;
     }
 
-    public String getFaction() {
+    public UnitFaction getFaction() {
         return faction;
     }
 
-    public void setFaction(String faction) {
+    public void setFaction(UnitFaction faction) {
         this.faction = faction;
     }
 
@@ -60,11 +63,11 @@ public class Unit {
         this.strength = strength;
     }
 
-    public String getStatus() {
+    public UnitStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(UnitStatus status) {
         this.status = status;
     }
 

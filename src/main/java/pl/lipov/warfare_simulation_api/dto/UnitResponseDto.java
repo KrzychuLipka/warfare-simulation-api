@@ -1,6 +1,8 @@
 package pl.lipov.warfare_simulation_api.dto;
 
-import pl.lipov.warfare_simulation_api.model.Movement;
+import pl.lipov.warfare_simulation_api.model.UnitFaction;
+import pl.lipov.warfare_simulation_api.model.UnitStatus;
+import pl.lipov.warfare_simulation_api.model.UnitType;
 
 import java.util.List;
 
@@ -8,10 +10,10 @@ public class UnitResponseDto {
 
     private Long id;
     private String name;
-    private String type;
-    private String faction;
+    private UnitType type;
+    private UnitFaction faction;
     private Integer strength;
-    private String status;
+    private UnitStatus status;
     private List<Long> movementIds;
 
     private UnitResponseDto() {
@@ -20,10 +22,10 @@ public class UnitResponseDto {
     public UnitResponseDto(
             Long id,
             String name,
-            String type,
-            String faction,
+            UnitType type,
+            UnitFaction faction,
             Integer strength,
-            String status,
+            UnitStatus status,
             List<Long> movementIds
     ) {
         this.id = id;
@@ -51,19 +53,19 @@ public class UnitResponseDto {
         this.name = name;
     }
 
-    public String getType() {
+    public UnitType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(UnitType type) {
         this.type = type;
     }
 
-    public String getFaction() {
+    public UnitFaction getFaction() {
         return faction;
     }
 
-    public void setFaction(String faction) {
+    public void setFaction(UnitFaction faction) {
         this.faction = faction;
     }
 
@@ -75,11 +77,11 @@ public class UnitResponseDto {
         this.strength = strength;
     }
 
-    public String getStatus() {
+    public UnitStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(UnitStatus status) {
         this.status = status;
     }
 

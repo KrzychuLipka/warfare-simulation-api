@@ -1,15 +1,20 @@
 package pl.lipov.warfare_simulation_api.controller;
 
 import jakarta.validation.Valid;
+import org.locationtech.jts.geom.Polygon;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import pl.lipov.warfare_simulation_api.dto.AreaRequestDto;
 import pl.lipov.warfare_simulation_api.dto.UnitRequestDto;
 import pl.lipov.warfare_simulation_api.dto.UnitResponseDto;
+import pl.lipov.warfare_simulation_api.dto.UnitSummary;
 import pl.lipov.warfare_simulation_api.mapper.UnitMapper;
 import pl.lipov.warfare_simulation_api.model.Unit;
+import pl.lipov.warfare_simulation_api.model.UnitFaction;
 import pl.lipov.warfare_simulation_api.service.UnitService;
+import pl.lipov.warfare_simulation_api.util.GeometryUtils;
 
 import java.util.List;
 
@@ -30,12 +35,41 @@ public class UnitController {
     }
 
     @GetMapping
-    public List<UnitResponseDto> getAllUnits() {
-        return UnitMapper.toUnitResponseDtoList(service.getAll());
+    public List<UnitResponseDto> findAll() {
+        return UnitMapper.toUnitResponseDtoList(service.findAll());
+    }
+
+    @GetMapping()
+    public List<UnitResponseDto> findByFaction(
+            @RequestParam() UnitFaction faction
+    ) {
+        return UnitMapper.toUnitResponseDtoList(service.findByFaction(faction));
+    }
+
+//    @GetMapping("/findByFaction")
+//    public List<UnitResponseDto> findByFaction(
+//            @RequestParam() UnitFaction faction
+//    ) {
+//        return UnitMapper.toUnitResponseDtoList(service.findByFaction(faction));
+//    }
+
+    @GetMapping("/enemy-air")
+    public List<UnitResponseDto> findEnemyAirUnits() {
+        return UnitMapper.toUnitResponseDtoList(service.findEnemyAirUnits());
+    }
+
+    @GetMapping("/enemy-air/movements")
+    public List<UnitResponseDto> findEnemyAirUnitsWithRecentMovementsInArea(
+            @RequestParam() AreaRequestDto areaRequest
+    ) {
+        Polygon area = GeometryUtils.parsePolygonWkt(areaRequest.areaWkt());
+        return UnitMapper.toUnitResponseDtoList(
+                service.findEnemyAirUnitsWithRecentMovementsInArea(areaRequest.since(), area)
+        );
     }
 
     @GetMapping("/filter")
-    public List<UnitResponseDto> filterUnits(
+    public List<UnitResponseDto> filter(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String type,
             @RequestParam(required = false) String faction,
@@ -45,14 +79,26 @@ public class UnitController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UnitResponseDto> getUnitById(@PathVariable Long id) {
+    public ResponseEntity<UnitResponseDto> findById(@PathVariable Long id) {
         Unit unit = service.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Unit not found"));
         return ResponseEntity.ok(UnitMapper.toUnitResponseDto(unit));
     }
 
+    @GetMapping("/findByName")
+    public List<UnitResponseDto> findByName(
+            @RequestParam() String name
+    ) {
+        return UnitMapper.toUnitResponseDtoList(service.findByName(name));
+    }
+
+    @GetMapping("/summaries")
+    public List<UnitSummary> findSummaries() {
+        return service.findUnitSummaries();
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<UnitResponseDto> updateUnit(
+    public ResponseEntity<UnitResponseDto> update(
             @PathVariable Long id,
             @Valid @RequestBody Unit unit
     ) {
@@ -62,7 +108,7 @@ public class UnitController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUnitById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         service.deleteById(id);
         return ResponseEntity.noContent().build();
     }
