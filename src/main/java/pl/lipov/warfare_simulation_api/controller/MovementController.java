@@ -59,7 +59,7 @@ public class MovementController {
     }
 
     //GET /api/movements/findByStartTimestampBetween?start=2025-10-01T00:00:00Z&end=2025-10-20T23:59:59Z
-    @GetMapping("/findByStartTimestampBetween")
+    @GetMapping("/by-start-timestamp-between")
     public List<MovementResponseDto> findByStartTimestampBetween(
             @RequestParam Instant start,
             @RequestParam Instant end
@@ -67,7 +67,7 @@ public class MovementController {
         return MovementMapper.toMovementResponseDtoList(movementService.findByStartTimestampBetween(start, end));
     }
 
-    @GetMapping("/findByEndTimestampBetween")
+    @GetMapping("/by-end-timestamp-between")
     public List<MovementResponseDto> findByEndTimestampBetween(
             @RequestParam Instant start,
             @RequestParam Instant end
@@ -75,17 +75,17 @@ public class MovementController {
         return MovementMapper.toMovementResponseDtoList(movementService.findByEndTimestampBetween(start, end));
     }
 
-    @GetMapping("/findByUnitFaction")
+    @GetMapping("/by-unit-faction")
     public List<MovementResponseDto> findByUnitFaction(
             @RequestParam UnitFaction faction
     ) {
         return MovementMapper.toMovementResponseDtoList(movementService.findByUnitFaction(faction));
     }
 
-    @GetMapping("/findRecentMovementsByUnitStatus")
+    @GetMapping("/recent-by-unit-status")
     public List<MovementResponseDto> findRecentMovementsByUnitStatus(
-            UnitStatus status,
-            Instant from
+            @RequestParam UnitStatus status,
+            @RequestParam Instant from
     ) {
         return MovementMapper.toMovementResponseDtoList(movementService.findRecentMovementsByUnitStatus(status, from));
     }

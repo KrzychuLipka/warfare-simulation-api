@@ -9,6 +9,8 @@ import org.locationtech.jts.io.WKTWriter;
 
 public class GeometryUtils {
 
+    private static final int EXPECTED_SRID = 2180;
+
     private GeometryUtils() {
     }
 
@@ -28,8 +30,9 @@ public class GeometryUtils {
     public static Polygon parsePolygonWkt(String wkt) {
         try {
             Geometry geometry = new WKTReader().read(wkt);
-            if (geometry instanceof Polygon) {
-                return (Polygon) geometry;
+            if (geometry instanceof Polygon polygon) {
+                polygon.setSRID(EXPECTED_SRID);
+                return polygon;
             } else {
                 throw new IllegalArgumentException("Provided WKT is not a Polygon");
             }

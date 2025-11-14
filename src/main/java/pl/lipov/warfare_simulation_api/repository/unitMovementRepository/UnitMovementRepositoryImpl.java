@@ -29,7 +29,7 @@ public class UnitMovementRepositoryImpl implements UnitMovementRepository {
                                 WHERE u.faction = :faction
                                   AND u.type = :type
                                   AND m.startTimestamp >= :since
-                                  AND function('ST_Intersects', m.path, :area)""", Unit.class
+                                  AND function('ST_Intersects', m.path, :area) = true""", Unit.class
                 )
                 .setParameter("faction", UnitFaction.REST_OF_WORLD)
                 .setParameter("type", UnitType.AIR)

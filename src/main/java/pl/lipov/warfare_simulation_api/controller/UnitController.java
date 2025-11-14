@@ -39,7 +39,7 @@ public class UnitController {
         return UnitMapper.toUnitResponseDtoList(service.findAll());
     }
 
-    @GetMapping()
+    @GetMapping("/by-faction")
     public List<UnitResponseDto> findByFaction(
             @RequestParam() UnitFaction faction
     ) {
@@ -60,7 +60,7 @@ public class UnitController {
 
     @GetMapping("/enemy-air/movements")
     public List<UnitResponseDto> findEnemyAirUnitsWithRecentMovementsInArea(
-            @RequestParam() AreaRequestDto areaRequest
+            @RequestBody() @Valid AreaRequestDto areaRequest
     ) {
         Polygon area = GeometryUtils.parsePolygonWkt(areaRequest.areaWkt());
         return UnitMapper.toUnitResponseDtoList(
@@ -85,7 +85,7 @@ public class UnitController {
         return ResponseEntity.ok(UnitMapper.toUnitResponseDto(unit));
     }
 
-    @GetMapping("/findByName")
+    @GetMapping("/by-name")
     public List<UnitResponseDto> findByName(
             @RequestParam() String name
     ) {

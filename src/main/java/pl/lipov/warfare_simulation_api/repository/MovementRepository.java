@@ -27,7 +27,7 @@ public interface MovementRepository extends JpaRepository<Movement, Long> {
             WHERE u.status = :status AND m.start_timestamp > :from
             """, nativeQuery = true)
     List<Movement> findRecentMovementsByUnitStatus(
-            @Param("status") UnitStatus status,
+            @Param("status") String status,
             @Param("from") Instant from
     );
 }

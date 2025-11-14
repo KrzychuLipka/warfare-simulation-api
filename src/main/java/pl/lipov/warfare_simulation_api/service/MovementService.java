@@ -47,7 +47,7 @@ public class MovementService {
             UnitStatus status,
             Instant from
     ) {
-        return repo.findRecentMovementsByUnitStatus(status, from);
+        return repo.findRecentMovementsByUnitStatus(status.name(), from);
     }
 
     public void deleteById(Long id) {
