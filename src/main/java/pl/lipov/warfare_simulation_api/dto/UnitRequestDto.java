@@ -1,24 +1,27 @@
 package pl.lipov.warfare_simulation_api.dto;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import pl.lipov.warfare_simulation_api.model.UnitFaction;
+import pl.lipov.warfare_simulation_api.model.UnitStatus;
+import pl.lipov.warfare_simulation_api.model.UnitType;
 
 public class UnitRequestDto {
 
     @NotBlank
     private String name;
-    @NotBlank
-    @Pattern(regexp = "LAND|AIR|NAVY")
-    private String type;
-    @NotBlank
-    @Pattern(regexp = "POLAND|REST_OF_WORLD")
-    private String faction;
+    @NotNull
+    private UnitType type;
+    @NotNull
+    private UnitFaction faction;
     @NotNull
     @Min(value = 1)
     @Max(value = 100)
     private Integer strength;
-    @NotBlank
-    @Pattern(regexp = "ACTIVE|INACTIVE|DESTROYED")
-    private String status;
+    @NotNull
+    private UnitStatus status;
 
     public String getName() {
         return name;
@@ -28,19 +31,19 @@ public class UnitRequestDto {
         this.name = name;
     }
 
-    public String getType() {
+    public UnitType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(UnitType type) {
         this.type = type;
     }
 
-    public String getFaction() {
+    public UnitFaction getFaction() {
         return faction;
     }
 
-    public void setFaction(String faction) {
+    public void setFaction(UnitFaction faction) {
         this.faction = faction;
     }
 
@@ -52,11 +55,11 @@ public class UnitRequestDto {
         this.strength = strength;
     }
 
-    public String getStatus() {
+    public UnitStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(UnitStatus status) {
         this.status = status;
     }
 }
