@@ -1,45 +1,7 @@
 package pl.lipov.warfare_simulation_api.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Repository;
-import pl.lipov.warfare_simulation_api.dto.UnitSummary;
+import org.springframework.data.repository.CrudRepository;
 import pl.lipov.warfare_simulation_api.model.Unit;
 
-import java.util.List;
-
-@Repository
-public interface UnitRepository extends JpaRepository<Unit, Long>, JpaSpecificationExecutor<Unit> {
-
-    @Query("""
-                SELECT u FROM Unit u
-                WHERE (:name IS NULL OR :name = '' OR LOCATE(LOWER(:name), LOWER(u.name)) > 0)
-                  AND (:type IS NULL OR :type = '' OR LOCATE(LOWER(:type), LOWER(u.type)) > 0)
-                  AND (:faction IS NULL OR :faction = '' OR LOCATE(LOWER(:faction), LOWER(u.faction)) > 0)
-                  AND (:status IS NULL OR :status = '' OR LOCATE(LOWER(:status), LOWER(u.status)) > 0)
-            """)
-    List<Unit> filter(
-            @Param("name") @Nullable String name,
-            @Param("type") @Nullable String type,
-            @Param("faction") @Nullable String faction,
-            @Param("status") @Nullable String status
-    );
-
-    @Query("""
-            SELECT u FROM Unit u
-            WHERE LOWER(u.name) LIKE LOWER(CONCAT('%', :name, '%'))
-            ORDER BY u.name
-            """)
-    List<Unit> findByByName(
-            @Param("name") String name
-    );
-
-//    @Query(value = "SELECT * FROM unit WHERE faction = :faction", nativeQuery = true)
-//    List<Unit> findByFaction(@Param("faction") UnitFaction faction);
-
-    @Query("SELECT new pl.lipov.warfare_simulation_api.dto.UnitSummary(u.id, u.name, u.type) FROM Unit u")
-    List<UnitSummary> getUnitSummaries();
+public interface UnitRepository extends CrudRepository<Unit, Long> {
 }

@@ -2,13 +2,11 @@ package pl.lipov.warfare_simulation_api.service;
 
 import org.springframework.stereotype.Service;
 import pl.lipov.warfare_simulation_api.model.Movement;
-import pl.lipov.warfare_simulation_api.model.UnitFaction;
-import pl.lipov.warfare_simulation_api.model.UnitStatus;
 import pl.lipov.warfare_simulation_api.repository.MovementRepository;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 @Service
 public class MovementService {
@@ -24,30 +22,13 @@ public class MovementService {
     }
 
     public List<Movement> findAll() {
-        return repo.findAll();
+        return StreamSupport
+                .stream(repo.findAll().spliterator(), false)
+                .toList();
     }
 
     public Optional<Movement> findById(Long id) {
         return repo.findById(id);
-    }
-
-    public List<Movement> findByStartTimestampBetween(Instant start, Instant end) {
-        return repo.findByStartTimestampBetween(start, end);
-    }
-
-    public List<Movement> findByEndTimestampBetween(Instant start, Instant end) {
-        return repo.findByEndTimestampBetween(start, end);
-    }
-
-    public List<Movement> findByUnitFaction(UnitFaction faction) {
-        return repo.findByUnitFaction(faction);
-    }
-
-    public List<Movement> findRecentMovementsByUnitStatus(
-            UnitStatus status,
-            Instant from
-    ) {
-        return repo.findRecentMovementsByUnitStatus(status.name(), from);
     }
 
     public void deleteById(Long id) {

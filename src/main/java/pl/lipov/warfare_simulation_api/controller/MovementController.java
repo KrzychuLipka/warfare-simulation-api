@@ -11,13 +11,10 @@ import pl.lipov.warfare_simulation_api.dto.MovementResponseDto;
 import pl.lipov.warfare_simulation_api.mapper.MovementMapper;
 import pl.lipov.warfare_simulation_api.model.Movement;
 import pl.lipov.warfare_simulation_api.model.Unit;
-import pl.lipov.warfare_simulation_api.model.UnitFaction;
-import pl.lipov.warfare_simulation_api.model.UnitStatus;
 import pl.lipov.warfare_simulation_api.service.MovementService;
 import pl.lipov.warfare_simulation_api.service.UnitService;
 import pl.lipov.warfare_simulation_api.util.GeometryUtils;
 
-import java.time.Instant;
 import java.util.List;
 
 @RestController
@@ -56,38 +53,6 @@ public class MovementController {
     @GetMapping
     public List<MovementResponseDto> findAll() {
         return MovementMapper.toMovementResponseDtoList(movementService.findAll());
-    }
-
-    //GET /api/movements/findByStartTimestampBetween?start=2025-10-01T00:00:00Z&end=2025-10-20T23:59:59Z
-    @GetMapping("/by-start-timestamp-between")
-    public List<MovementResponseDto> findByStartTimestampBetween(
-            @RequestParam Instant start,
-            @RequestParam Instant end
-    ) {
-        return MovementMapper.toMovementResponseDtoList(movementService.findByStartTimestampBetween(start, end));
-    }
-
-    @GetMapping("/by-end-timestamp-between")
-    public List<MovementResponseDto> findByEndTimestampBetween(
-            @RequestParam Instant start,
-            @RequestParam Instant end
-    ) {
-        return MovementMapper.toMovementResponseDtoList(movementService.findByEndTimestampBetween(start, end));
-    }
-
-    @GetMapping("/by-unit-faction")
-    public List<MovementResponseDto> findByUnitFaction(
-            @RequestParam UnitFaction faction
-    ) {
-        return MovementMapper.toMovementResponseDtoList(movementService.findByUnitFaction(faction));
-    }
-
-    @GetMapping("/recent-by-unit-status")
-    public List<MovementResponseDto> findRecentMovementsByUnitStatus(
-            @RequestParam UnitStatus status,
-            @RequestParam Instant from
-    ) {
-        return MovementMapper.toMovementResponseDtoList(movementService.findRecentMovementsByUnitStatus(status, from));
     }
 
     @GetMapping("/{id}")
