@@ -1,16 +1,18 @@
 package pl.lipov.warfare_simulation_api.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
+import pl.lipov.warfare_simulation_api.dto.UnitSummary;
 import pl.lipov.warfare_simulation_api.model.Unit;
 
 import java.util.List;
 
 @Repository
-public interface UnitRepository extends JpaRepository<Unit, Long> {
+public interface UnitRepository extends JpaRepository<Unit, Long>, JpaSpecificationExecutor<Unit> {
 
     @Query("""
                 SELECT u FROM Unit u
@@ -25,4 +27,19 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
             @Param("faction") @Nullable String faction,
             @Param("status") @Nullable String status
     );
+
+    @Query("""
+            SELECT u FROM Unit u
+            WHERE LOWER(u.name) LIKE LOWER(CONCAT('%', :name, '%'))
+            ORDER BY u.name
+            """)
+    List<Unit> findByByName(
+            @Param("name") String name
+    );
+
+//    @Query(value = "SELECT * FROM unit WHERE faction = :faction", nativeQuery = true)
+//    List<Unit> findByFaction(@Param("faction") UnitFaction faction);
+
+    @Query("SELECT new pl.lipov.warfare_simulation_api.dto.UnitSummary(u.id, u.name, u.type) FROM Unit u")
+    List<UnitSummary> getUnitSummaries();
 }

@@ -3,6 +3,7 @@ package pl.lipov.warfare_simulation_api.controller;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.lipov.warfare_simulation_api.dto.MovementRequestDto;
@@ -10,6 +11,8 @@ import pl.lipov.warfare_simulation_api.dto.MovementResponseDto;
 import pl.lipov.warfare_simulation_api.mapper.MovementMapper;
 import pl.lipov.warfare_simulation_api.model.Movement;
 import pl.lipov.warfare_simulation_api.model.Unit;
+import pl.lipov.warfare_simulation_api.model.UnitFaction;
+import pl.lipov.warfare_simulation_api.model.UnitStatus;
 import pl.lipov.warfare_simulation_api.service.MovementService;
 import pl.lipov.warfare_simulation_api.service.UnitService;
 import pl.lipov.warfare_simulation_api.util.GeometryUtils;
@@ -49,27 +52,42 @@ public class MovementController {
                 .body(MovementMapper.toMovementResponseDto(savedMovement));
     }
 
-
+    @PreAuthorize("hasAuthority('SCOPE_read:movements')")
     @GetMapping
-    public List<MovementResponseDto> getAllMovements() {
-        return MovementMapper.toMovementResponseDtoList(movementService.getAll());
+    public List<MovementResponseDto> findAll() {
+        return MovementMapper.toMovementResponseDtoList(movementService.findAll());
     }
 
     //GET /api/movements/findByStartTimestampBetween?start=2025-10-01T00:00:00Z&end=2025-10-20T23:59:59Z
-    @GetMapping("/findByStartTimestampBetween")
-    public List<MovementResponseDto> getMovementsByStartTimestampBetween(
+    @GetMapping("/by-start-timestamp-between")
+    public List<MovementResponseDto> findByStartTimestampBetween(
             @RequestParam Instant start,
             @RequestParam Instant end
     ) {
         return MovementMapper.toMovementResponseDtoList(movementService.findByStartTimestampBetween(start, end));
     }
 
-    @GetMapping("/findByEndTimestampBetween")
-    public List<MovementResponseDto> getMovementsByEndTimestampBetween(
+    @GetMapping("/by-end-timestamp-between")
+    public List<MovementResponseDto> findByEndTimestampBetween(
             @RequestParam Instant start,
             @RequestParam Instant end
     ) {
         return MovementMapper.toMovementResponseDtoList(movementService.findByEndTimestampBetween(start, end));
+    }
+
+    @GetMapping("/by-unit-faction")
+    public List<MovementResponseDto> findByUnitFaction(
+            @RequestParam UnitFaction faction
+    ) {
+        return MovementMapper.toMovementResponseDtoList(movementService.findByUnitFaction(faction));
+    }
+
+    @GetMapping("/recent-by-unit-status")
+    public List<MovementResponseDto> findRecentMovementsByUnitStatus(
+            @RequestParam UnitStatus status,
+            @RequestParam Instant from
+    ) {
+        return MovementMapper.toMovementResponseDtoList(movementService.findRecentMovementsByUnitStatus(status, from));
     }
 
     @GetMapping("/{id}")
@@ -93,7 +111,7 @@ public class MovementController {
 
         existingMovement.setStartTimestamp(movementRequest.getStartTimestamp());
         existingMovement.setEndTimestamp(movementRequest.getEndTimestamp());
-        existingMovement.setPath(GeometryUtils.parseWkt(movementRequest.getPathWKT()));
+        existingMovement.setPath(GeometryUtils.parseMultiLineWkt(movementRequest.getPathWKT()));
         existingMovement.setUnit(unit);
 
         Movement updatedMovement = movementService.save(existingMovement);
