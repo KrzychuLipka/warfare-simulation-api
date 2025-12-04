@@ -1,6 +1,7 @@
 package pl.lipov.warfare_simulation_api.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import pl.lipov.warfare_simulation_api.mapper.UnitMapper;
 import pl.lipov.warfare_simulation_api.model.Unit;
 import pl.lipov.warfare_simulation_api.service.UnitService;
 
+import java.time.Instant;
 import java.util.List;
 
 @RestController
@@ -32,6 +34,46 @@ public class UnitController {
     @GetMapping
     public List<UnitResponseDto> findAll() {
         return UnitMapper.toUnitResponseDtoList(service.findAll());
+    }
+
+    @GetMapping("/by-faction")
+    public List<UnitResponseDto> findByFaction(
+            @RequestParam() UnitFaction faction
+    ) {
+        return UnitMapper.toUnitResponseDtoList(service.findByFaction(faction));
+    }
+
+//    @GetMapping("/findByFaction")
+//    public List<UnitResponseDto> findByFaction(
+//            @RequestParam() UnitFaction faction
+//    ) {
+//        return UnitMapper.toUnitResponseDtoList(service.findByFaction(faction));
+//    }
+
+    @GetMapping("/enemy-air")
+    public List<UnitResponseDto> findEnemyAirUnits() {
+        return UnitMapper.toUnitResponseDtoList(service.findEnemyAirUnits());
+    }
+
+    @GetMapping("/enemy-air/movements")
+    public List<UnitResponseDto> findEnemyAirUnitsWithRecentMovementsInArea(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant since,
+            @RequestParam String areaWkt
+    ) {
+        Polygon area = GeometryUtils.parsePolygonWkt(areaWkt);
+        return UnitMapper.toUnitResponseDtoList(
+                service.findEnemyAirUnitsWithRecentMovementsInArea(since, area)
+        );
+    }
+
+    @GetMapping("/filter")
+    public List<UnitResponseDto> filter(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) String faction,
+            @RequestParam(required = false) String status
+    ) {
+        return UnitMapper.toUnitResponseDtoList(service.filter(name, type, faction, status));
     }
 
     @GetMapping("/{id}")
