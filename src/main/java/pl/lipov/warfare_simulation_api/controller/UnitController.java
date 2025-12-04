@@ -2,11 +2,11 @@ package pl.lipov.warfare_simulation_api.controller;
 
 import jakarta.validation.Valid;
 import org.locationtech.jts.geom.Polygon;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import pl.lipov.warfare_simulation_api.dto.AreaRequestDto;
 import pl.lipov.warfare_simulation_api.dto.UnitRequestDto;
 import pl.lipov.warfare_simulation_api.dto.UnitResponseDto;
 import pl.lipov.warfare_simulation_api.dto.UnitSummary;
@@ -16,6 +16,7 @@ import pl.lipov.warfare_simulation_api.model.UnitFaction;
 import pl.lipov.warfare_simulation_api.service.UnitService;
 import pl.lipov.warfare_simulation_api.util.GeometryUtils;
 
+import java.time.Instant;
 import java.util.List;
 
 @RestController
@@ -60,11 +61,12 @@ public class UnitController {
 
     @GetMapping("/enemy-air/movements")
     public List<UnitResponseDto> findEnemyAirUnitsWithRecentMovementsInArea(
-            @RequestBody() @Valid AreaRequestDto areaRequest
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant since,
+            @RequestParam String areaWkt
     ) {
-        Polygon area = GeometryUtils.parsePolygonWkt(areaRequest.areaWkt());
+        Polygon area = GeometryUtils.parsePolygonWkt(areaWkt);
         return UnitMapper.toUnitResponseDtoList(
-                service.findEnemyAirUnitsWithRecentMovementsInArea(areaRequest.since(), area)
+                service.findEnemyAirUnitsWithRecentMovementsInArea(since, area)
         );
     }
 
