@@ -7,7 +7,7 @@ import pl.lipov.warfare_simulation_api.controller.UnitController
 import spock.lang.Specification
 
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles('test')
 class LoadContextTest extends Specification {
     @Autowired
     UnitController unitController

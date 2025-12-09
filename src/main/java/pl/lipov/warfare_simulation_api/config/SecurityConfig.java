@@ -2,6 +2,7 @@ package pl.lipov.warfare_simulation_api.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.jwt.JwtClaimNames;
@@ -11,6 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableMethodSecurity
+@Profile("!test")
 public class SecurityConfig {
 
     private static final String EXPECTED_AUDIENCE = "https://warfare-simulation-api";
