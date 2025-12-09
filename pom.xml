@@ -178,6 +178,7 @@
                 <version>3.2.5</version>
                 <configuration>
                     <includes>
+                        <include>**/*Test.java</include>
                         <include>**/*Test.groovy</include>
                     </includes>
                     <useModulePath>false</useModulePath>
